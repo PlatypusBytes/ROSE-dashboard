@@ -1,0 +1,6 @@
+Flask==2.3.3
+Flask-Cors==4.0.0
+schema==0.7.5
+pyproj==3.6.1
+pytest==7.4.2
+rose@git+https://github.com/PlatypusBytes/ROSE@fbed0fa7fc0f26a2625b344874353401ec794216
