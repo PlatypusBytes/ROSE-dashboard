@@ -24,7 +24,7 @@ Session(app)
 
 
 # path for the local calculations
-CALCS_PATH = "../dash_calculations"
+CALCS_PATH = "./dash_calculations"
 CALCS_JSON = "calculations.json"
 RUNNING_JSON = "tmp.json"
 

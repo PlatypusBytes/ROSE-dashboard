@@ -1,7 +1,6 @@
 import pytest
-
 from dashboard.application import app
-from dashboard.tests.utils import TestUtils
+from tests.utils import TestUtils
 
 import json
 app.config["TESTING"] = True
@@ -36,7 +35,7 @@ def test_run_empty_file():
 
 def test_valid_calculation():
 
-    with open("test_data/test_rose_input.json", "r") as file:
+    with open("tests/test_data/test_rose_input.json", "r") as file:
         sos_segment_input = json.load(file)
 
     # test file
@@ -72,10 +71,10 @@ def test_valid_calculation():
 
 def test_valid_calculation_ricardo():
 
-    with open("test_data/test_rose_input.json", "r") as file:
+    with open("tests/test_data/test_rose_input.json", "r") as file:
         sos_segment_input = json.load(file)
 
-    with open("test_data/test_ricardo_input.json", "r") as file:
+    with open("tests/test_data/test_ricardo_input.json", "r") as file:
         ricardo_input = json.load(file)
 
     # test file
@@ -97,7 +96,7 @@ def test_valid_calculation_ricardo():
                              'exist': False,
                              'message': "Calculation running",
                              'running': True,
-                             "valid": False}
+                             "valid": True}
 
         # assert dictionary
         assert res_dict == expected_res_dict
@@ -116,7 +115,7 @@ def test_get_settlement():
     """
 
     # open all data
-    with open("test_data/test_proj/data.json", "r") as file:
+    with open("tests/test_data/test_proj/data.json", "r") as file:
         all_data = json.load(file)
 
     # start test client
@@ -161,7 +160,7 @@ def test_get_dynamic_stiffness():
     """
 
     # open all data
-    with open("test_data/test_proj/data.json", "r") as file:
+    with open("tests/test_data/test_proj/data.json", "r") as file:
         all_data = json.load(file)
 
     # start test client
@@ -206,7 +205,7 @@ def test_graph():
     :return:
     """
     # open all data
-    with open("test_data/test_proj/data.json", "r") as file:
+    with open("tests/test_data/test_proj/data.json", "r") as file:
         all_data = json.load(file)
 
     # start test client

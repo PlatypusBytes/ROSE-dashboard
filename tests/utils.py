@@ -14,12 +14,12 @@ class TestUtils():
         """
 
         # remove calculation data
-        calculation_path = Path("../dash_calculations", project_name)
+        calculation_path = Path("./dash_calculations", project_name)
         if calculation_path.exists():
             shutil.rmtree(calculation_path)
 
         # read calculations.json
-        calculations_json = Path("../dash_calculations/calculations.json")
+        calculations_json = Path("./dash_calculations/calculations.json")
         with open(calculations_json, "r") as json_file:
             calculation_data = json.load(json_file)
 
