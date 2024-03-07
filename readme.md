@@ -2,3 +2,5 @@
 
 # Dashboard for ROSE
 This is the repository for the [ROSE](https://github.com/PlatypusBytes/ROSE) dashboard.
+
+![ROSE Dashboard Demo](/_static/dashboard.gif)
