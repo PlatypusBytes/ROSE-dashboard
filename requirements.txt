@@ -5,3 +5,5 @@ schema==0.7.5
 pyproj==3.6.1
 pytest==7.4.2
 rose@git+https://github.com/PlatypusBytes/ROSE
+SignalProcessing@git+https://github.com/PlatypusBytes/SignalProcessing.git
+WolfStiffness@https://github.com/PlatypusBytes/WolfStiffness.git
