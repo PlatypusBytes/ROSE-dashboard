@@ -24,7 +24,8 @@ def train_model(time, velocity, start_coord):
 
     sprinter = set_train(time, velocity, start_coord, TrainType.SPRINTER_SGM)
     intercity = set_train(time, velocity, start_coord, TrainType.DOUBLEDEKKER)
-    cargo = set_train(time, velocity, start_coord, TrainType.CARGO_FALNS5)
+    traxx = set_train(time, velocity, start_coord, TrainType.TRAXX)
+    cargo = set_train(time, velocity, start_coord, TrainType.CARGO_SGNS)
 
     trains = {"Sprinter": {"model": sprinter,
                            "traffic": {"nb-per-hour": 4,
@@ -34,6 +35,10 @@ def train_model(time, velocity, start_coord):
                             "traffic": {"nb-per-hour": 4,
                                         "nb-hours": 16,
                                         "nb-axles": 16}},
+              "Traxx": {"model": traxx,
+                        "traffic": {"nb-per-hour": 4,
+                                    "nb-hours": 16,
+                                    "nb-axles": 16}},
               "Cargo": {"model": cargo,
                         "traffic": {"nb-per-hour": 27,
                                     "nb-hours": 1,
@@ -112,7 +117,13 @@ def time_integration():
     return time
 
 
-def create_dash_input_json(path_sos_json, path_output_json):
+def create_dash_input_json(path_sos_json, path_output_json, project_name="ROSE-calculations"):
+    """ Creates input json file for the dashboard
+
+    :param path_sos_json: path to the sos json file
+    :param path_output_json: path to the output json file
+    :param project_name: name of the project
+    """
     # reads sos data
     sos_data = read_sos_data(path_sos_json)
 
@@ -155,7 +166,7 @@ def create_dash_input_json(path_sos_json, path_output_json):
         new_sos_dict[segment_name] = {"coordinates": coordinates,
                                       "scenarios": scenarios}
 
-    input_dict = {"project_name": "proj1",
+    input_dict = {"project_name": project_name,
                   "sos_data": new_sos_dict,
                   "traffic_data": train_dicts,
                   "track_info": track_info,
@@ -166,4 +177,4 @@ def create_dash_input_json(path_sos_json, path_output_json):
 
 
 if __name__ == '__main__':
-    create_dash_input_json(r"..\data_proc\SOS.json", 'example_rose_input.json')
+    create_dash_input_json(r"data_SoS/SOS.json", 'example_rose_input.json')

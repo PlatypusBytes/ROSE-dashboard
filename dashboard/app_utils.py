@@ -406,11 +406,10 @@ def runner(input_data, path_results, calculation_time=50):
             sett_varandas.read_traffic(train_dicts, calculation_time)
             sett_varandas.settlement(idx=[0])
 
-            sett_li_selig = accumulation_model.LiSelig(t_ini=100)
+            sett_li_selig = accumulation_model.LiSelig(t_ini=50)
             sett_li_selig.read_traffic(train_dicts, calculation_time)
             sett_li_selig.read_SoS([scenario], np.zeros(input_data["track_info"]["geometry"]["n_sleepers"]).astype(int))
             sett_li_selig.calculate(sleeper_width, sleeper_length, idx=[0])
-
 
             # calculate output step size (1 outout value per day + last value
             n_steps = len(sett_varandas.cumulative_time)
@@ -445,7 +444,6 @@ def runner(input_data, path_results, calculation_time=50):
 
 if __name__ == '__main__':
     import json
-
 
     input_data = r"D:\software_development\rose\dashboard\example_rose_input6.json"
 
