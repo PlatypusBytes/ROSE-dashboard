@@ -4,3 +4,5 @@
 venv/*
 .vscode/*
 */__pycache__/*
+dash_calculations/*
+ROSE_dashboard.egg-info/*
