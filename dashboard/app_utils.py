@@ -308,7 +308,7 @@ def get_base_data(features, output_file):
     return base_data
 
 
-def runner(input_data, path_results, calculation_time=50):
+def runner(input_data, path_results, calculation_time=365):
     """
     Runs the complete ROSE calculation: Firstly stiffness and damping of the soil are determined with wolf; secondly
     the coupled dynamic train track interaction model is ran; lastly the cumulative settlement model is ran.
