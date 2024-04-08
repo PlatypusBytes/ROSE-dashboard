@@ -12,9 +12,7 @@ from dashboard import validate_json, validate_ricardo_json
 from dashboard import hashing
 from dashboard import io_utils
 
-app = Flask(__name__,
-            static_url_path="", static_folder="templates", template_folder="templates"
-            )
+app = Flask(__name__, static_url_path="", static_folder="templates", template_folder="templates")
 CORS(app)
 
 # session
@@ -133,9 +131,7 @@ def dynamic_stiffness():
     train_type = request.args.get("train_type")
     value_type = request.args.get("value_type")  # mean or std
 
-    geojson = io_utils.parse_dynamic_stiffness_data(
-        session.get("data"), train_type, value_type
-    )
+    geojson = io_utils.parse_dynamic_stiffness_data(session.get("data"), train_type, value_type)
 
     return geojson
 
@@ -146,9 +142,7 @@ def settlement():
     time = int(request.args.get("time_index"))
     value_type = request.args.get("value_type")  # mean or std
 
-    geojson = io_utils.parse_cumulative_settlement_data(
-        session.get("data"), time, value_type
-    )
+    geojson = io_utils.parse_cumulative_settlement_data(session.get("data"), time, value_type)
 
     return geojson
 
