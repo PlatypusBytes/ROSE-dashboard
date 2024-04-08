@@ -203,7 +203,7 @@ def get_dynamic_stiffness_track(coupled_model):
 
     # get vertical force and displacement at middle node of the track
     y_idx = middle_node.index_dof[1]
-    force_vector = coupled_model.track.solver.F_out[:, y_idx]
+    force_vector = coupled_model.solver.F_out[:, y_idx]
     vert_displacement = middle_node.displacements[:, 1]
 
     # calculate dynamic stiffness
@@ -211,7 +211,7 @@ def get_dynamic_stiffness_track(coupled_model):
 
     return dyn_stiffness
 
-def add_feature_to_geo_json(coordinates, time, mean_dyn_stiffness,std_dyn_stiffness,train_names,
+def add_feature_to_geo_json(coordinates, time, mean_dyn_stiffness, std_dyn_stiffness,train_names,
                             mean_cum_settlement, std_cum_settlement):
     """
     Adds a feature of a single SOS segment to a geojson feature dict. The feature includes lat-lon coordinates;
@@ -444,8 +444,7 @@ def runner(input_data, path_results, calculation_time=50):
 
 if __name__ == '__main__':
     import json
-
-    input_data = r"D:\software_development\rose\dashboard\example_rose_input6.json"
+    input_data = r"example_rose_input_small.json"
 
     input_data = json.load(open(input_data))
-    runner(input_data, "../dash_calculations")
+    runner(input_data, "./dash_calculations")
