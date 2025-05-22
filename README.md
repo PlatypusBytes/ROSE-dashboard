@@ -18,7 +18,7 @@ The dashboard is build with Flask. To run the dashboard you need to set the an e
 This can be done by running the following commands:
 
 ```bash
-export FLASK_APP=dashboard:create_app
+export FLASK_APP=dashboard/application.py
 ```
 
 To run the dashboard you can now use the following command:

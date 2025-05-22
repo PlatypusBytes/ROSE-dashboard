@@ -7,4 +7,5 @@ PS:
 > flask run
 
 in linux:
-> export FLASK_APP=application.py
+> export FLASK_APP=dashboard/application.py
+> flask run
