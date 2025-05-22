@@ -111,13 +111,13 @@ def time_integration():
     time["tot_ini_time"] = 0.5  # total initalisation time  [s]
     time["n_t_ini"] = 5000  # number of time steps initialisation time  [-]
 
-    time["tot_calc_time"] = 1.2  # total time during calculation phase   [s]
+    time["tot_calc_time"] = 1.0  # total time during calculation phase   [s]
     time["n_t_calc"] = 8000  # number of time steps during calculation phase [-]
 
     return time
 
 
-def create_dash_input_json(path_sos_json, path_output_json, project_name="ROSE-calculations"):
+def create_dash_input_json(path_sos_json, path_output_json, project_name="ROSEcalculations"):
     """ Creates input json file for the dashboard
 
     :param path_sos_json: path to the sos json file
@@ -130,7 +130,7 @@ def create_dash_input_json(path_sos_json, path_output_json, project_name="ROSE-c
     # set time integration and track information
     time_data = time_integration()
     track_materials = materials()
-    track_geometry = geometry([200], fact=1)
+    track_geometry = geometry([140], fact=1)
 
     track_info = {"geometry": track_geometry,
                   "materials": track_materials}
