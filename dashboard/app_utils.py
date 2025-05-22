@@ -1,11 +1,12 @@
 import os
 import json
+import numpy as np
 from pyproj import Transformer
 # import ROSE packages
 from rose.model.model_part import Material, Section
 from rose.model.train_model import *
 from rose.model.train_track_interaction import *
-from rose.model import accumulation_model
+from rose.model.accumulation_model import AccumulationModel, Varandas, LiSelig
 from solvers.newmark_solver import NewmarkImplicitForce
 from dashboard import io_utils
 
@@ -21,7 +22,7 @@ def transform_rd_to_lat_lon(rd_x, rd_y):
     x, y = transformer.transform(rd_x, rd_y)
     return x,y
 
-def calculate_weighted_mean_and_std(values: np.ndarray, weights: np.ndarray) -> [np.ndarray, np.ndarray]:
+def calculate_weighted_mean_and_std(values: np.ndarray, weights: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     """
     Return the weighted average and standard deviation.
 
@@ -405,19 +406,20 @@ def runner(input_data, path_results, calculation_time=365):
             for j, train in enumerate(train_dicts.values()):
                 train["forces"] = forces[j][i,:][None,:]
 
+            model = Varandas()
             # calculate cumulative settlement
-            sett_varandas = accumulation_model.Varandas()
+            sett_varandas = AccumulationModel(accumulation_model=model)
             sett_varandas.read_traffic(train_dicts, calculation_time)
-            sett_varandas.settlement(idx=[0])
+            sett_varandas.calculate_settlement(idx=[0])
 
-            sett_li_selig = accumulation_model.LiSelig(t_ini=50)
+            model = LiSelig([scenario], np.zeros(input_data["track_info"]["geometry"]["n_sleepers"]).astype(int), sleeper_width, sleeper_length, t_ini=50)
+            sett_li_selig = AccumulationModel(accumulation_model=model)
             sett_li_selig.read_traffic(train_dicts, calculation_time)
-            sett_li_selig.read_SoS([scenario], np.zeros(input_data["track_info"]["geometry"]["n_sleepers"]).astype(int))
-            sett_li_selig.calculate(sleeper_width, sleeper_length, idx=[0])
+            sett_li_selig.calculate_settlement(idx=[0])
 
-            # calculate output step size (1 outout value per day + last value
-            n_steps = len(sett_varandas.cumulative_time)
-            n_days = sett_varandas.cumulative_time[-1] - sett_varandas.cumulative_time[0]
+            # calculate output step size (1 output value per day + last value
+            n_steps = len(sett_varandas.results['time'])
+            n_days = sett_varandas.results['time'][-1] - sett_varandas.results['time'][0]
             step_size = n_steps / n_days
 
             # get output indices
@@ -426,8 +428,9 @@ def runner(input_data, path_results, calculation_time=365):
             indices.append(n_steps-1)
 
             # get cumulative settlement result
-            cumulative_time = sett_varandas.cumulative_time[indices]
-            cumulative_settlements.append(sett_varandas.displacement[0][indices] + sett_li_selig.displacement[0][indices])
+            cumulative_time = np.array(sett_varandas.results['time'])[indices]
+            cumulative_settlements.append(np.array(sett_varandas.results['displacement'][0])[indices] +
+                                          np.array(sett_li_selig.results['displacement'][0])[indices])
 
         # calculate mean and std cumulative settlement in mm
         cumulative_settlement_mean, cumulative_settlement_std = calculate_weighted_mean_and_std(
