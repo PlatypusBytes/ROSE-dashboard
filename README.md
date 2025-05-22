@@ -27,4 +27,13 @@ To run the dashboard you can now use the following command:
 flask run
 ```
 
-Go to your web browser and navigate to: http://localhost:5000/ in your web browser.
+Go to your web browser and navigate to: http://localhost:5000/ in your web browser, and select the file you want to run.
+
+# Preparation of file to run
+
+To run the dashboard you need to have a json file that specifies the parameters for the ROSE model.
+To create this file, you can use the file [create_input_json](dashboard/create_input_json.py).
+
+In this file you can specify the parameters for the ROSE model, such as the type of train, speed, and the settings
+for the numerical model.
+The file will create a json file that it is read by the ROSE dashboard.
