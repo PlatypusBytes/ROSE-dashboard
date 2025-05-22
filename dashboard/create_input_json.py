@@ -62,7 +62,7 @@ def geometry(nb_sleeper):
     geometry = {}
     geometry["n_segments"] = len(nb_sleeper)
     geometry["n_sleepers"] = [nb_sleeper]  # number of sleepers per segment
-    geometry["sleeper_distance"] = 0.6 * fact  # distance between sleepers, equal for each segment
+    geometry["sleeper_distance"] = 0.6  # distance between sleepers, equal for each segment
     geometry["depth_soil"] = [1.]  # depth of the soil [m] per segment
 
     geometry["sleeper_length"] = 3.5
@@ -139,7 +139,7 @@ def create_dash_input_json(path_sos_json, embankment_data, path_output_json, pro
     # set time integration and track information
     time_data = time_integration()
     track_materials = materials()
-    track_geometry = geometry([140], fact=1)
+    track_geometry = geometry([140])
 
     track_info = {"geometry": track_geometry,
                   "materials": track_materials}
