@@ -6,7 +6,9 @@ from rose.pre_process.default_trains import TrainType, set_train, train_class_to
 def read_sos_data(path_sos_json):
     """
     Reads sos json file
-    :return:
+
+    :param path_sos_json: path to the sos json file
+    :return: sos data dictionary
     """
     with open(path_sos_json, 'r') as f:
         sos_data = json.load(f)
@@ -15,11 +17,12 @@ def read_sos_data(path_sos_json):
 
 def train_model(time, velocity, start_coord):
     """
-    Reads default train models
-    :param time:
-    :param velocity:
-    :param start_coord:
-    :return:
+    Creates train model structure
+
+    :param time: time vector
+    :param velocity: train velocity
+    :param start_coord: start coordinate
+    :return: train model dictionary
     """
 
     sprinter = set_train(time, velocity, start_coord, TrainType.SPRINTER_SGM)
@@ -42,33 +45,36 @@ def train_model(time, velocity, start_coord):
               "Cargo": {"model": cargo,
                         "traffic": {"nb-per-hour": 27,
                                     "nb-hours": 1,
-                                    "nb-axles": 10 * 4}}}
+                                    "nb-axles": 10 * 4}},
+            }
 
     return trains
 
 
-def geometry(nb_sleeper, fact=1):
+def geometry(nb_sleeper):
     """
     Sets track geometry parameters
 
-    :param nb_sleeper:
-    :param fact:
-    :return:
+    :param nb_sleeper: number of sleepers per segment
+    :return: geometry dictionary
     """
     # Set geometry parameters
     geometry = {}
     geometry["n_segments"] = len(nb_sleeper)
-    geometry["n_sleepers"] = [int(n / fact) for n in nb_sleeper]  # number of sleepers per segment
+    geometry["n_sleepers"] = [nb_sleeper]  # number of sleepers per segment
     geometry["sleeper_distance"] = 0.6 * fact  # distance between sleepers, equal for each segment
     geometry["depth_soil"] = [1.]  # depth of the soil [m] per segment
 
+    geometry["sleeper_length"] = 3.5
+    geometry["sleeper_width"] = 0.25
     return geometry
 
 
 def materials():
     """
     Sets track material parameters
-    :return:
+
+    :return: material dictionary
     """
     material = {}
     # set parameters of the rail
@@ -103,7 +109,7 @@ def time_integration():
     """
     Sets time integration data
 
-    :return:
+    :return: time dictionary
     """
     time = {}
 
@@ -114,13 +120,16 @@ def time_integration():
     time["tot_calc_time"] = 1.0  # total time during calculation phase   [s]
     time["n_t_calc"] = 8000  # number of time steps during calculation phase [-]
 
+    time["cumulative_time"] = 365 # cumulative time for the calculation [days]
     return time
 
 
-def create_dash_input_json(path_sos_json, path_output_json, project_name="ROSEcalculations"):
-    """ Creates input json file for the dashboard
+def create_dash_input_json(path_sos_json, embankment_data, path_output_json, project_name="ROSEcalculations"):
+    """
+    Creates input json file for the dashboard
 
     :param path_sos_json: path to the sos json file
+    :param embankment_data: embankment data
     :param path_output_json: path to the output json file
     :param project_name: name of the project
     """
@@ -161,10 +170,14 @@ def create_dash_input_json(path_sos_json, path_output_json, project_name="ROSEca
             probability = v2["probability"]
             soil_layers = v2["soil_layers"]
             scenarios[scenario] = {"probability": probability,
-                                   "soil_layers": soil_layers}
+                                   "soil_layers": soil_layers,
+                                   }
 
         new_sos_dict[segment_name] = {"coordinates": coordinates,
-                                      "scenarios": scenarios}
+                                      "scenarios": scenarios,
+                                      "embankment": embankment_data,
+                                      "construction_time": 50,  # construction time [years]
+                                      }
 
     input_dict = {"project_name": project_name,
                   "sos_data": new_sos_dict,
@@ -177,4 +190,8 @@ def create_dash_input_json(path_sos_json, path_output_json, project_name="ROSEca
 
 
 if __name__ == '__main__':
-    create_dash_input_json(r"data_SoS/SOS.json", 'example_rose_input.json')
+    # set embankment data
+    E = 100e6
+    v = 0.2
+    emb = ["embankment", E / (2 * (1 + v)), v, 2000, 0.05, 0.8]
+    create_dash_input_json(r"data_SoS/SOS.json", emb, 'example_rose_input.json')

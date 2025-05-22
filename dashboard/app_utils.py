@@ -7,6 +7,8 @@ from rose.model.model_part import Material, Section
 from rose.model.train_model import *
 from rose.model.train_track_interaction import *
 from rose.model.accumulation_model import AccumulationModel, Varandas, LiSelig
+from rose.utils.wolf_utils import run_wolf_on_layering, create_layering_for_wolf
+
 from solvers.newmark_solver import NewmarkImplicitForce
 from dashboard import io_utils
 
@@ -312,18 +314,15 @@ def get_base_data(features, output_file):
     return base_data
 
 
-def runner(input_data, path_results, calculation_time=365):
+def runner(input_data, path_results):
     """
     Runs the complete ROSE calculation: Firstly stiffness and damping of the soil are determined with wolf; secondly
     the coupled dynamic train track interaction model is ran; lastly the cumulative settlement model is ran.
 
-    :param input_data:
-    :param path_results:
-    :param calculation_time: time of the cumulative settlement calculation [days]
+    :param input_data: input data dictionary
+    :param path_results: path to save results
     :return:
     """
-    from rose.utils.wolf_utils import create_layering_for_wolf, run_wolf_on_layering
-
     m_to_mm = 1e3   # meter to mm
     Nm_to_kNmm = 1e-6  # N/m to kN/mm
 
@@ -333,13 +332,6 @@ def runner(input_data, path_results, calculation_time=365):
 
     sos_data = input_data["sos_data"]
     traffic_data = input_data["traffic_data"]
-
-    # set embankment data
-    E = 100e6
-    v = 0.2
-    emb = ["embankment", E / (2 * (1 + v)), v, 2000, 0.05, 0.8]
-    sleeper_width = 0.25
-    sleeper_length = 3.5
 
     features = {}
     # loop over segments
@@ -361,8 +353,8 @@ def runner(input_data, path_results, calculation_time=365):
             for k2, v2 in v["scenarios"].items():
 
                 # get wolf data
-                layering = create_layering_for_wolf(v2["soil_layers"], emb)
-                omega = 2*np.pi * train["velocity"] / train["cart_length"]
+                layering = create_layering_for_wolf(v2["soil_layers"], v["embankment"])
+                omega = 2 * np.pi * train["velocity"] / train["cart_length"]
                 wolf_data = run_wolf_on_layering(layering, np.array([omega]))
 
                 # determine dynamic soil stiffness and damping
@@ -409,12 +401,16 @@ def runner(input_data, path_results, calculation_time=365):
             model = Varandas()
             # calculate cumulative settlement
             sett_varandas = AccumulationModel(accumulation_model=model)
-            sett_varandas.read_traffic(train_dicts, calculation_time)
+            sett_varandas.read_traffic(train_dicts, input_data["time_integration"]["cumulative_time"])
             sett_varandas.calculate_settlement(idx=[0])
 
-            model = LiSelig([scenario], np.zeros(input_data["track_info"]["geometry"]["n_sleepers"]).astype(int), sleeper_width, sleeper_length, t_ini=50)
+            model = LiSelig([scenario],
+                            np.zeros(input_data["track_info"]["geometry"]["n_sleepers"]).astype(int),
+                            input_data["track_info"]["geometry"]["sleeper_width"],
+                            input_data["track_info"]["geometry"]["sleeper_length"],
+                            t_ini=v["construction_time"])
             sett_li_selig = AccumulationModel(accumulation_model=model)
-            sett_li_selig.read_traffic(train_dicts, calculation_time)
+            sett_li_selig.read_traffic(train_dicts, input_data["time_integration"]["cumulative_time"])
             sett_li_selig.calculate_settlement(idx=[0])
 
             # calculate output step size (1 output value per day + last value

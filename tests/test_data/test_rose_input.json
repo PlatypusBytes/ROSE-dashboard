@@ -140,29 +140,13 @@
               7.0,
               5.0
             ],
-            "formation": [
-              "nan",
-              "Boxtel",
-              "Boxtel (Liempde)",
-              "Boxtel",
-              "Boxtel",
-              "Boxtel"
-            ],
-            "b": [
-              0.004,
-              0.004,
-              0.084,
-              0.004,
-              0.1174,
-              0.004
-            ],
-            "Su": [
-              NaN,
-              NaN,
-              50.0,
-              NaN,
-              40.0,
-              NaN
+            "cohesion": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
             ],
             "a": [
               0.001,
@@ -172,54 +156,6 @@
               0.0088,
               0.001
             ],
-            "gamma_wet": [
-              19.0,
-              19.0,
-              16.2,
-              19.0,
-              15.0,
-              19.0
-            ],
-            "damping": [
-              0.05,
-              0.05,
-              0.05,
-              0.05,
-              0.05,
-              0.05
-            ],
-            "poisson": [
-              0.25,
-              0.25,
-              0.4,
-              0.25,
-              0.45,
-              0.25
-            ],
-            "m": [
-              NaN,
-              NaN,
-              0.8,
-              NaN,
-              0.8,
-              NaN
-            ],
-            "c": [
-              0.0001,
-              0.0001,
-              0.0032,
-              0.0001,
-              0.0051,
-              0.0001
-            ],
-            "cohesion": [
-              0.0,
-              0.0,
-              0.0,
-              0.0,
-              0.0,
-              0.0
-            ],
             "friction_angle": [
               32.5,
               30.0,
@@ -228,13 +164,13 @@
               22.5,
               30.0
             ],
-            "Young_modulus": [
-              103.3,
-              244.3,
-              225.3,
-              244.3,
-              217.2,
-              244.3
+            "b": [
+              0.004,
+              0.004,
+              0.084,
+              0.004,
+              0.1174,
+              0.004
             ],
             "gamma_dry": [
               17.0,
@@ -244,13 +180,61 @@
               15.0,
               17.0
             ],
+            "poisson": [
+              0.25,
+              0.25,
+              0.4,
+              0.25,
+              0.45,
+              0.25
+            ],
+            "formation": [
+              "NaN",
+              "Boxtel",
+              "Boxtel (Liempde)",
+              "Boxtel",
+              "Boxtel",
+              "Boxtel"
+            ],
+            "damping": [
+              0.05,
+              0.05,
+              0.05,
+              0.05,
+              0.05,
+              0.05
+            ],
             "POP": [
-              NaN,
-              NaN,
+              "NaN",
+              "NaN",
               10.0,
-              NaN,
+              "NaN",
               10.0,
-              NaN
+              "NaN"
+            ],
+            "gamma_wet": [
+              19.0,
+              19.0,
+              16.2,
+              19.0,
+              15.0,
+              19.0
+            ],
+            "Su": [
+              "NaN",
+              "NaN",
+              50.0,
+              "NaN",
+              40.0,
+              "NaN"
+            ],
+            "c": [
+              0.0001,
+              0.0001,
+              0.0032,
+              0.0001,
+              0.0051,
+              0.0001
             ],
             "shear_modulus": [
               41.3,
@@ -259,10 +243,35 @@
               97.7,
               74.9,
               97.7
+            ],
+            "Young_modulus": [
+              103.3,
+              244.3,
+              225.3,
+              244.3,
+              217.2,
+              244.3
+            ],
+            "m": [
+              "NaN",
+              "NaN",
+              0.8,
+              "NaN",
+              0.8,
+              "NaN"
             ]
           }
         }
-      }
+      },
+      "embankment": [
+        "embankment",
+        41666666.66666667,
+        0.2,
+        2000,
+        0.05,
+        0.8
+      ],
+      "construction_time": 50
     }
   },
   "traffic_data": {
@@ -273,18 +282,18 @@
       ],
       "bogie_length": 2.5,
       "bogie_distances": [
-        -10.3,
-        10.3
+        -9,
+        9
       ],
-      "cart_length": 26.1,
+      "cart_length": 25.15,
       "cart_distances": [
         30.0
       ],
       "mass_wheel": 1500.0,
-      "mass_bogie": 3200.0,
-      "mass_cart": 48800.0,
-      "inertia_bogie": 170.0,
-      "inertia_cart": 73400.0,
+      "mass_bogie": 1600.0,
+      "mass_cart": 23000.0,
+      "inertia_bogie": 85.0,
+      "inertia_cart": 36700.0,
       "prim_stiffness": 4400000.0,
       "sec_stiffness": 2468000.0,
       "prim_damping": 590.0,
@@ -302,12 +311,14 @@
     "geometry": {
       "n_segments": 1,
       "n_sleepers": [
-        20
+        140
       ],
-      "sleeper_distance": 6.0,
+      "sleeper_distance": 0.6,
       "depth_soil": [
         1.0
-      ]
+      ],
+      "sleeper_length": 3.5,
+      "sleeper_width": 0.25
     },
     "materials": {
       "young_mod_beam": 210000000000.0,
@@ -330,7 +341,8 @@
   "time_integration": {
     "tot_ini_time": 0.5,
     "n_t_ini": 5000,
-    "tot_calc_time": 1.2,
-    "n_t_calc": 8000
+    "tot_calc_time": 1.0,
+    "n_t_calc": 8000,
+    "cumulative_time": 10
   }
 }

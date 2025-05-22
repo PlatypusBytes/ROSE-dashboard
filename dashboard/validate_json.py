@@ -11,6 +11,8 @@ def definitions():
     # sos data dictionary
     conf_schema_sos = Schema({
         "coordinates": And([[float], [float]]),
+        "construction_time": And(Use(int)),
+        "embankment": And([float, int, str]),
         "scenarios": {And(str): {"probability": And(Use(float)),
                                  "soil_layers": {"soil_name": And([str]),
                                                  "top_level": And([float, int]),
@@ -64,6 +66,8 @@ def definitions():
                                     "n_sleepers": Schema([int]),
                                     "sleeper_distance": And(Use(float)),
                                     "depth_soil": Schema([float, int]),
+                                    "sleeper_length": And(Use(float)),
+                                    "sleeper_width": And(Use(float)),
                                     },
                        "materials": {"young_mod_beam": And(Use(float)),
                                      "poisson_beam": And(Use(float)),
@@ -86,6 +90,7 @@ def definitions():
                              "n_t_ini": And(Use(int)),
                              "tot_calc_time": And(Use(float)),
                              "n_t_calc": And(Use(int)),
+                             "cumulative_time": And(Use(int)),
                              }
     })
 
