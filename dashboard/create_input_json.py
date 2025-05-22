@@ -61,7 +61,7 @@ def geometry(nb_sleeper):
     # Set geometry parameters
     geometry = {}
     geometry["n_segments"] = len(nb_sleeper)
-    geometry["n_sleepers"] = [nb_sleeper]  # number of sleepers per segment
+    geometry["n_sleepers"] = nb_sleeper  # number of sleepers per segment
     geometry["sleeper_distance"] = 0.6  # distance between sleepers, equal for each segment
     geometry["depth_soil"] = [1.]  # depth of the soil [m] per segment
 
