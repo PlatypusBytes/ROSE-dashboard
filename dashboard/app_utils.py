@@ -35,7 +35,7 @@ def calculate_weighted_mean_and_std(values: np.ndarray, weights: np.ndarray) -> 
 
     return average, np.sqrt(variance)
 
-def assign_data_to_coupled_model(train_info, track_info, time_int, soil):
+def assign_data_to_coupled_model(train_info, track_info, time_int, soil, seed):
     # choose solver
     # solver = solver_c.NewmarkSolver()
     solver = NewmarkImplicitForce()
@@ -117,6 +117,9 @@ def assign_data_to_coupled_model(train_info, track_info, time_int, soil):
     train = TrainModel()
     train.time = time
     train.velocities = velocities
+
+    train.use_irregularities = True
+    train.irregularity_parameters = {"Av": 0.000002095, "seed": seed}
 
     # set up carts
     train.cart_distances = train_info["cart_distances"]
@@ -339,6 +342,7 @@ def runner(input_data, path_results, calculation_time=365):
 
     features = {}
     # loop over segments
+    ss = 0
     for k, v in sos_data.items():
         # loop over trains
         forces = []
@@ -368,8 +372,8 @@ def runner(input_data, path_results, calculation_time=365):
                         "damping": damping}
 
                 # assign data to coupled model
-                coupled_model = assign_data_to_coupled_model(train,input_data["track_info"], input_data["time_integration"], soil)
-
+                coupled_model = assign_data_to_coupled_model(train,input_data["track_info"], input_data["time_integration"], soil, seed=ss)
+                ss += 1
                 # run coupled model
                 coupled_model.main()
 
@@ -444,7 +448,7 @@ def runner(input_data, path_results, calculation_time=365):
 
 if __name__ == '__main__':
     import json
-    input_data = r"example_rose_input_small.json"
+    input_data = r"example_rose_input.json"
 
     input_data = json.load(open(input_data))
     runner(input_data, "./dash_calculations")
